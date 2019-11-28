@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WebSocket Echo Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="http://bit.ly/cdn-bootstrap-jq"></script>
+    <link rel="stylesheet" href="http://bit.ly/cdn-bootstrap-css" />
+    <link rel="stylesheet" href="http://bit.ly/cdn-bootstrap-theme" />
+
+    <script>
+      var ws = new WebSocket("ws://localhost:8181");
+      ws.onopen = function(e) {
+        console.log("Connection to server opened");
+      };
+
+      ws.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var messages = document.getElementById("message");
+        var message = document.createElement("li");
+        message.innerHTML = data.message;
+        messages.appendChild(message);
+      };
+
+      function sendMessage() {
+        ws.send($("#message").val());
+      }
+
+      function appendLog(nickname, message) {
+        var messages = document.getElementById("messages");
+        var messageElem = document.createElement("li");
+        var message_text = "[" + nickname + "] -" + message;
+        messageElem.innerHTML = message_text;
+        messages.appendChild(messageElem);
+      }
+    </script>
+  </head>
+  <body lang="en">
+    <div class="vertical-center">
+      <div class="container">
+        <p>&nbsp;</p>
+        <ul id="messages"></ul>
+        <form
+          role="form"
+          id="chat_form"
+          onsubmit="sendMessage(); return false;"
+        >
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="text"
+              name="message"
+              id="message"
+              placeholder="Type text to echo in here"
+              value=""
+              autofocus
+            />
+          </div>
+          <button
+            type="button"
+            id="send"
+            class="btn btn-primary"
+            onclick="sendMessage();"
+          >
+            Send!
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="http://bit.ly/cdn-bootstrap-minjs"></script>
+  </body>
+</html>
